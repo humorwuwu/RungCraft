@@ -14,7 +14,9 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:e2e": "playwright test",
-    "icons": "node scripts/generate-icons.mjs"
+    "icons": "node scripts/generate-icons.mjs",
+    "app": "npm run build && node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs"
   },
   "dependencies": {
     "@radix-ui/react-context-menu": "^2.4.1",

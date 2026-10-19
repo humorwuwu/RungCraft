@@ -18,6 +18,24 @@
 - **持久化**：IndexedDB 自动保存与恢复快照，`.ladproj.json` 导入导出，Zod schema 校验与版本迁移（v1→v2 自动补齐 UDT 列表）。
 - **内置示例**：电机启停、交通灯（TON + CTU + 比较）、传送带计数（上升沿 + CTU + 比较）、水箱控制（FB + DB + UDT + 模拟量比较）；首次启动有引导页，可选择新建空白工程或从示例开始。
 
+## 运行成品（无需开发环境）
+
+```bash
+npm install          # 只需第一次
+npm run app          # 构建并启动，自动打开浏览器（http://127.0.0.1:4173）
+```
+
+也可以直接双击仓库根目录的启动器（首次运行会自动构建）：
+
+- macOS：`start-rungcraft.command`
+- Windows：`start-rungcraft.bat`
+
+启动器用 Node 内置 http 服务 `dist/`，只监听 `127.0.0.1`，不上传任何数据。如果已经有构建产物，`npm start` 可以只启动服务器、不重新构建。
+
+> 为什么不能直接双击 `index.html`：浏览器禁止 `file://` 页面创建 Web Worker 和使用 IndexedDB，而仿真引擎跑在 Worker 里、工程保存在 IndexedDB 里，所以必须通过 `http://` 打开。启动器就是为了解决这一点。
+
+分发给其他人：对方安装 Node.js 20+ 后，把仓库（不含 `node_modules`）打包即可；或构建后把 `dist/`、`scripts/serve.mjs` 和启动器脚本一起打包。
+
 ## 开发
 
 ```bash
@@ -29,6 +47,7 @@ npm run build        # 类型检查 + 生产构建
 npm run lint         # oxlint
 npm run typecheck    # 仅类型检查
 npm run icons        # 由 public/icon.svg 重新生成各尺寸 PNG 图标（需要本机 Chrome）
+npm run app          # 构建并以本地服务器运行成品
 ```
 
 性能基线（`src/perf/stress.test.ts`，本机 Node）：500 个网络 / 约 5500 个元素编译 7 ms、10 次扫描 6 ms（每次扫描远低于 20 ms 周期）；单个 2000 元素网络布局 1 ms。测试用例设置了宽松预算，用于拦住量级退化。
