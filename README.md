@@ -44,6 +44,19 @@ npm start            # 已有构建产物时只启动服务器
 
 **分发给其他人**：`npm run package` 会生成 `rungcraft-<版本>.zip`（`dist/` + 启动器 + `RungCraft.app` + 说明 + LICENSE，约 950 KB），对方装好 Node.js 20+ 后解压双击即可，**不需要 npm install**。从网络下载来的 `.app` / `.command` 首次打开时 macOS 可能提示"无法验证开发者"，右键 → 打开 一次即可。
 
+## 发布版本（GitHub Releases）
+
+版本发布由 `.github/workflows/release.yml` 自动完成：推送 `v*` 标签后，GitHub Actions 会在 macOS runner 上执行 lint、单元测试与构建，生成 `RungCraft.app`，再用 `npm run package` 打出 `rungcraft-<版本>.zip`，生成 SHA-256 校验和并发布到 Release（附自动生成的更新说明）。
+
+```bash
+# 1. 先把 package.json 的 version 改成新版本并提交
+# 2. 打标签并推送（tag 必须与 package.json 版本一致，如 v0.2.0）
+git tag v0.2.0
+git push origin main --tags
+```
+
+也可以在 GitHub 的 **Actions → Release → Run workflow** 手动发布：tag 留空则使用 `v<package.json 版本>`；填写 `v0.2.0-rc.1` 这类带 `-` 的 tag 会自动标记为预发布，勾选 `draft` 则先创建草稿。重复运行会覆盖同名 Release 的附件。
+
 ## 开发
 
 ```bash
