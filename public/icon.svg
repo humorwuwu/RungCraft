@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="RungCraft 梯形图编辑器">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0e7fc0" />
+      <stop offset="1" stop-color="#063b58" />
+    </linearGradient>
+  </defs>
+
+  <rect x="4" y="4" width="120" height="120" rx="26" fill="url(#bg)" />
+
+  <!-- 左右电源轨 -->
+  <g stroke="#eaf5fc" stroke-width="9" stroke-linecap="round">
+    <line x1="34" y1="26" x2="34" y2="102" />
+    <line x1="94" y1="26" x2="94" y2="102" />
+  </g>
+
+  <!-- 上梯级：常开触点 -->
+  <g stroke="#eaf5fc" stroke-width="9" stroke-linecap="round">
+    <line x1="34" y1="43" x2="56" y2="43" />
+    <line x1="72" y1="43" x2="94" y2="43" />
+  </g>
+  <g stroke="#eaf5fc" stroke-width="8" stroke-linecap="round">
+    <line x1="56" y1="31" x2="56" y2="55" />
+    <line x1="72" y1="31" x2="72" y2="55" />
+  </g>
+
+  <!-- 下梯级：能流（绿色） -->
+  <line x1="34" y1="85" x2="94" y2="85" stroke="#4ade80" stroke-width="9" stroke-linecap="round" />
+</svg>
