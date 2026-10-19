@@ -52,6 +52,32 @@ npm run app          # 构建并以本地服务器运行成品
 
 性能基线（`src/perf/stress.test.ts`，本机 Node）：500 个网络 / 约 5500 个元素编译 7 ms、10 次扫描 6 ms（每次扫描远低于 20 ms 周期）；单个 2000 元素网络布局 1 ms。测试用例设置了宽松预算，用于拦住量级退化。
 
+## 多机同步与目录瘦身
+
+版本库里只有源码。下面这些都不会进版本库，删掉随时可以重新生成：
+
+| 内容 | 体积 | 重新生成 |
+| --- | --- | --- |
+| `node_modules/` | 约 220 MB | `npm ci`（走本机 npm 缓存，通常几秒） |
+| `dist/` | 约 760 KB | `npm run build` |
+| `rungcraft-<版本>.zip` | 约 280 KB | `npm run package` |
+| `test-results/`、`playwright-report/` | 测试产物 | 跑测试时自动生成 |
+
+新电脑上开始开发：
+
+```bash
+git clone <仓库地址> rungcraft
+cd rungcraft
+npm ci               # 等价于 npm run setup
+npm run dev
+```
+
+几点说明：
+
+- **不需要下载浏览器**：端到端测试直接用本机安装的 Chrome（`playwright.config.ts` 中的 `channel: 'chrome'`），不会往 `~/Library/Caches/ms-playwright` 装几百 MB 的 Chromium。
+- **建议用 git 同步，不要用云盘**：`node_modules/` 有十几万个小文件，iCloud/Dropbox 这类同步会非常慢且容易产生冲突副本，`.git/` 同样不适合云盘。如果一定要用云盘，至少要排除 `node_modules/`、`dist/`、`.git/`。
+- 干净工作区约 **2 MB**（其中 `.git` 占 836 KB），源码本身约 1 MB。
+
 ## 目录结构
 
 ```text

@@ -16,7 +16,9 @@
     "test:e2e": "playwright test",
     "icons": "node scripts/generate-icons.mjs",
     "app": "npm run build && node scripts/serve.mjs",
-    "start": "node scripts/serve.mjs"
+    "start": "node scripts/serve.mjs",
+    "package": "node scripts/package.mjs",
+    "setup": "npm ci"
   },
   "dependencies": {
     "@radix-ui/react-context-menu": "^2.4.1",
