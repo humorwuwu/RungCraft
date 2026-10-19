@@ -6,6 +6,9 @@ dist-ssr/
 *.tsbuildinfo
 vite.config.ts.timestamp-*
 
+# 打包产物（见 README「运行成品」）
+rungcraft-*.zip
+
 # 测试与报告产物
 coverage/
 test-results/

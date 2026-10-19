@@ -19,5 +19,13 @@ if not exist "dist\index.html" (
   )
 )
 
-node scripts\serve.mjs %*
+set SERVER=scripts\serve.mjs
+if not exist "%SERVER%" set SERVER=serve.mjs
+if not exist "%SERVER%" (
+  echo 找不到启动脚本（scripts\serve.mjs 或 serve.mjs），请确认文件完整。
+  pause
+  exit /b 1
+)
+
+node "%SERVER%" %*
 pause

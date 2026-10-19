@@ -30,7 +30,17 @@ if [ ! -f dist/index.html ]; then
   fi
 fi
 
-node scripts/serve.mjs "$@"
+# 兼容两种目录布局：仓库里的 scripts/serve.mjs，或与启动器同级的 serve.mjs
+SERVER="scripts/serve.mjs"
+[ -f "$SERVER" ] || SERVER="serve.mjs"
+if [ ! -f "$SERVER" ]; then
+  echo "找不到启动脚本（scripts/serve.mjs 或 serve.mjs），请确认文件完整。"
+  echo "按任意键关闭…"
+  read -n 1 -s
+  exit 1
+fi
+
+node "$SERVER" "$@"
 status=$?
 if [ $status -ne 0 ]; then
   echo "按任意键关闭…"

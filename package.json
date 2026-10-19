@@ -1,7 +1,7 @@
 {
   "name": "rungcraft",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "浏览器中的梯形图（LAD）编辑器与扫描周期仿真器，参考西门子 TIA Portal 的交互与指令集",
   "license": "MIT",
   "type": "module",
