@@ -6,7 +6,9 @@ dist-ssr/
 *.tsbuildinfo
 vite.config.ts.timestamp-*
 
-# 打包产物（见 README「运行成品」）
+# 生成的一键启动应用与打包产物（见 README「运行成品」）
+RungCraft.app/
+*.iconset/
 rungcraft-*.zip
 
 # 测试与报告产物

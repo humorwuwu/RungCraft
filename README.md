@@ -20,21 +20,29 @@
 
 ## 运行成品（无需开发环境）
 
+最省事的方式是双击一键启动程序：
+
+| 平台 | 双击这个 | 说明 |
+| --- | --- | --- |
+| macOS | `RungCraft.app` | 无终端窗口，自动打开浏览器；在 Dock 上退出应用即停止服务 |
+| Windows | `start-rungcraft.bat` | 保留一个命令行窗口显示地址，Ctrl+C 停止 |
+| macOS / Linux | `start-rungcraft.command` | 终端方式，Ctrl+C 停止 |
+
+`RungCraft.app` 由 `npm run launcher` 生成（只用 macOS 自带的 `sips` / `iconutil`，不依赖 `node_modules`，刚 clone 下来也能生成）。
+
+命令行方式：
+
 ```bash
 npm install          # 只需第一次
-npm run app          # 构建并启动，自动打开浏览器（http://127.0.0.1:4173）
+npm run app          # 构建并启动（等价于 npm run build && npm start）
+npm start            # 已有构建产物时只启动服务器
 ```
 
-也可以直接双击仓库根目录的启动器（首次运行会自动构建）：
+启动器做的事：用 Node 内置 http 服务 `dist/`，只监听 `127.0.0.1`，不上传任何数据；缺少构建产物时自动构建；找不到 Node 时弹出提示（应用包内没有终端可看日志）；**重复双击不会起第二个服务**——检测到已在运行就直接打开浏览器。
 
-- macOS：`start-rungcraft.command`
-- Windows：`start-rungcraft.bat`
+> 为什么不能直接双击 `dist/index.html`：浏览器禁止 `file://` 页面创建 Web Worker 和使用 IndexedDB，而仿真引擎跑在 Worker 里、工程保存在 IndexedDB 里，所以必须通过 `http://` 打开。启动器就是为了解决这一点。
 
-启动器用 Node 内置 http 服务 `dist/`，只监听 `127.0.0.1`，不上传任何数据。如果已经有构建产物，`npm start` 可以只启动服务器、不重新构建。
-
-> 为什么不能直接双击 `index.html`：浏览器禁止 `file://` 页面创建 Web Worker 和使用 IndexedDB，而仿真引擎跑在 Worker 里、工程保存在 IndexedDB 里，所以必须通过 `http://` 打开。启动器就是为了解决这一点。
-
-分发给其他人：对方安装 Node.js 20+ 后，把仓库（不含 `node_modules`）打包即可；或构建后把 `dist/`、`scripts/serve.mjs` 和启动器脚本一起打包。
+**分发给其他人**：`npm run package` 会生成 `rungcraft-<版本>.zip`（`dist/` + 启动器 + `RungCraft.app` + 说明 + LICENSE，约 950 KB），对方装好 Node.js 20+ 后解压双击即可，**不需要 npm install**。从网络下载来的 `.app` / `.command` 首次打开时 macOS 可能提示"无法验证开发者"，右键 → 打开 一次即可。
 
 ## 开发
 
@@ -62,6 +70,7 @@ npm run app          # 构建并以本地服务器运行成品
 | `dist/` | 约 760 KB | `npm run build` |
 | `rungcraft-<版本>.zip` | 约 280 KB | `npm run package` |
 | `test-results/`、`playwright-report/` | 测试产物 | 跑测试时自动生成 |
+| `RungCraft.app/` | 700 KB | `npm run launcher` |
 
 新电脑上开始开发：
 

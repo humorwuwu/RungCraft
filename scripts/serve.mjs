@@ -2,7 +2,10 @@
  * RungCraft 本地启动器：用 Node 内置 http 服务 dist/ 并自动打开浏览器。
  * 不依赖任何第三方包，也不上传任何数据。
  *
- *   node scripts/serve.mjs [--port 4173] [--no-open]
+ *   node scripts/serve.mjs [--port 4173] [--no-open] [--force]
+ *
+ * 如果该端口上已经有一个 RungCraft 在运行，就直接打开浏览器并退出，
+ * 不会重复起第二个服务（一键启动器重复双击时很有用）。
  *
  * 为什么不用 file:// 直接打开 index.html：
  * 浏览器禁止 file:// 页面创建 Web Worker 和使用 IndexedDB，
@@ -20,6 +23,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const dist = join(root, 'dist')
 const args = process.argv.slice(2)
 const noOpen = args.includes('--no-open')
+const force = args.includes('--force')
 const portArgIndex = args.indexOf('--port')
 const basePort = portArgIndex >= 0 ? Number(args[portArgIndex + 1]) : 4173
 
@@ -28,12 +32,32 @@ if (!Number.isInteger(basePort) || basePort <= 0 || basePort > 65535) {
   process.exit(1)
 }
 
+// 已经在运行就直接打开浏览器，避免重复双击起出第二个服务。
+if (!force && (await isRungCraftRunning(basePort))) {
+  const url = `http://127.0.0.1:${basePort}/`
+  console.log(`RungCraft 已经在运行：${url}`)
+  if (!noOpen) openBrowser(url)
+  process.exit(0)
+}
+
 try {
   await access(join(dist, 'index.html'), constants.R_OK)
 } catch {
   console.error('还没有构建产物：找不到 dist/index.html')
   console.error('请先运行：npm run build      或      npm run app（构建并启动）')
   process.exit(1)
+}
+
+/** 探测端口上是否已经是 RungCraft（用页面标题做标记）。 */
+async function isRungCraftRunning(port) {
+  try {
+    const response = await fetch(`http://127.0.0.1:${port}/`, { signal: AbortSignal.timeout(1000) })
+    if (!response.ok) return false
+    const html = (await response.text()).slice(0, 4096)
+    return html.includes('RungCraft')
+  } catch {
+    return false
+  }
 }
 
 const MIME = {

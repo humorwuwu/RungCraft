@@ -40,6 +40,11 @@ try {
   for (const file of ['start-rungcraft.command', 'start-rungcraft.bat']) {
     await cp(join(root, file), join(stage, file))
   }
+  // macOS 一键启动应用：存在就一起打包（npm run launcher 生成）
+  const appBundle = join(root, 'RungCraft.app')
+  if (process.platform === 'darwin' && existsSync(appBundle)) {
+    await cp(appBundle, join(stage, 'RungCraft.app'), { recursive: true })
+  }
   await writeFile(join(stage, 'HOW-TO-RUN.txt'), howToRun(pkg.version), 'utf8')
 
   if (existsSync(zipPath)) await rm(zipPath)
@@ -77,9 +82,14 @@ function howToRun(version) {
 如何运行
 --------
 1. 安装 Node.js 20 或更高版本：https://nodejs.org/
-2. macOS 双击 start-rungcraft.command；Windows 双击 start-rungcraft.bat
-   （命令行方式：node scripts/serve.mjs）
+2. macOS 双击 RungCraft.app（推荐，无终端窗口）；
+   也可以双击 start-rungcraft.command。
+   Windows 双击 start-rungcraft.bat。
+   命令行方式：node scripts/serve.mjs
 3. 浏览器会自动打开 http://127.0.0.1:4173/
+
+从网络下载的 RungCraft.app / start-rungcraft.command 首次打开时，
+macOS 可能提示"无法验证开发者"：在图标上右键 → 打开 → 再点"打开"即可（只需一次）。
 
 说明
 ----

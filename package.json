@@ -18,7 +18,8 @@
     "app": "npm run build && node scripts/serve.mjs",
     "start": "node scripts/serve.mjs",
     "package": "node scripts/package.mjs",
-    "setup": "npm ci"
+    "setup": "npm ci",
+    "launcher": "node scripts/make-app.mjs"
   },
   "dependencies": {
     "@radix-ui/react-context-menu": "^2.4.1",
