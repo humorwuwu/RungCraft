@@ -1,6 +1,7 @@
 /**
  * 打包可分发的成品：dist/ + 启动器 + 服务脚本 + 说明 + LICENSE
- * 输出 rungcraft-<version>.zip 到仓库根目录（该文件不进版本库）。
+ * 输出 release/macos/rungcraft-<version>.zip（不进版本库）。
+ * Vite 的 dist/ 是启动器要服务的网页包，不是发行目录，不要把 zip 放进去。
  *
  *   npm run package            构建后打包
  *   npm run package -- --skip-build   跳过构建，直接打包现有 dist/
@@ -15,7 +16,7 @@ import { fileURLToPath } from 'node:url'
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const skipBuild = process.argv.includes('--skip-build')
 const pkg = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'))
-const zipPath = join(root, `${pkg.name}-${pkg.version}.zip`)
+const zipPath = join(root, 'release', 'macos', `${pkg.name}-${pkg.version}.zip`)
 
 if (!skipBuild) {
   console.log('构建中…')
@@ -31,6 +32,7 @@ if (!existsSync(join(root, 'dist/index.html'))) {
   process.exit(1)
 }
 
+await mkdir(join(root, 'release', 'macos'), { recursive: true })
 const stage = await mkdtemp(join(tmpdir(), 'rungcraft-package-'))
 try {
   await cp(join(root, 'dist'), join(stage, 'dist'), { recursive: true })

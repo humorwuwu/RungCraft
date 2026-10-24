@@ -75,7 +75,7 @@ jobs:
           set -euo pipefail
           VERSION=$(node -p "JSON.parse(require('fs').readFileSync('package.json','utf8')).version")
           NAME=$(node -p "JSON.parse(require('fs').readFileSync('package.json','utf8')).name")
-          ZIP="$NAME-$VERSION.zip"
+          ZIP="release/macos/$NAME-$VERSION.zip"
 
           if [ "$REF_TYPE" = "tag" ]; then
             TAG="$REF_NAME"
@@ -125,8 +125,8 @@ jobs:
         with:
           name: rungcraft-${{ steps.meta.outputs.version }}
           path: |
-            rungcraft-*.zip
-            rungcraft-*.zip.sha256
+            release/macos/rungcraft-*.zip
+            release/macos/rungcraft-*.zip.sha256
           if-no-files-found: error
           retention-days: 14
 

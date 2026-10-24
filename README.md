@@ -42,7 +42,7 @@ npm start            # 已有构建产物时只启动服务器
 
 > 为什么不能直接双击 `dist/index.html`：浏览器禁止 `file://` 页面创建 Web Worker 和使用 IndexedDB，而仿真引擎跑在 Worker 里、工程保存在 IndexedDB 里，所以必须通过 `http://` 打开。启动器就是为了解决这一点。
 
-**分发给其他人**：`npm run package` 会生成 `rungcraft-<版本>.zip`（`dist/` + 启动器 + `RungCraft.app` + 说明 + LICENSE，约 950 KB），对方装好 Node.js 20+ 后解压双击即可，**不需要 npm install**。从网络下载来的 `.app` / `.command` 首次打开时 macOS 可能提示"无法验证开发者"，右键 → 打开 一次即可。
+**分发给其他人**：`npm run package` 会生成 `release/macos/rungcraft-<版本>.zip`（`dist/` + 启动器 + `RungCraft.app` + 说明 + LICENSE，约 950 KB），对方装好 Node.js 20+ 后解压双击即可，**不需要 npm install**。从网络下载来的 `.app` / `.command` 首次打开时 macOS 可能提示"无法验证开发者"，右键 → 打开 一次即可。
 
 ## 发布版本（GitHub Releases）
 
